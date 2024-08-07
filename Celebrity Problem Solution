@@ -1,0 +1,84 @@
+# Celebrity Problem Solution
+# Here celebrity is the person who does not know anyboady and everbody knows him
+"""      A  B  C  D
+      A  0  0  1  1
+      B  0  0  1  1
+      C  1  0  0  1
+      D  0  0  0  0
+NOTE: Here "D" is the celebrity because everybody know D (1) and D doesn't know anybody (0).
+"""
+
+class Node:
+    def __init__(self,value):
+        self.data=value
+        self.next=None
+class Stack:
+    def __init__(self):
+        self.top=None
+    def traverse(self):
+        curr=self.top
+        while(curr!=None):
+            print(curr.data)
+            curr=curr.next
+    def push(self,value):
+        new_Node=Node(value)
+        curr=self.top
+        if(curr!=None):
+            new_Node.next=self.top
+            self.top=new_Node
+        else:
+            self.top=new_Node
+    def pop(self):
+        if(self.top==None):
+            return ("Stack Empty")
+        else:
+            curr=self.top
+            self.top=self.top.next
+            return (curr.data)
+    def isEmpty(self):
+        return (self.top==None)
+    def peek(self):
+        if(self.isEmpty()==True):
+            return ("Stack Empty")
+        else:
+            return (self.top.data)
+    def size(self):
+        pos=0
+        curr=self.top
+        while(curr!=None):
+            pos+=1
+            curr=curr.next
+        return pos
+    def find_the_celeb(self,L):
+        
+        s=Stack()
+        
+        for i in range(len(L)):
+            s.push(i)
+        while s.size()>=2:
+            i=s.pop()
+            j=s.pop()
+            if L[i][j]==0:
+            # j is not celebrity
+                s.push(i)
+            else:
+            # i is not celebrity
+                s.push(j)
+        celebrity=s.pop()
+        for i in range(len(L)):
+            if i!=celebrity:
+                if L[i][celebrity]==0 or L[celebrity][i]==1:
+                    print("No one is a Celebrity")
+                    return
+        print("Celebrity is : ",celebrity)
+L=[
+        [0,0,1,1],
+        [0,0,1,0],
+        [1,0,0,0],
+        [0,0,1,0]
+        ]            
+        
+st=Stack()
+print(st.find_the_celeb(L))
+        
+        
