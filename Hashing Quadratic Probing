@@ -1,0 +1,77 @@
+print("Hello World")
+#   Hashing Quadratic Probing
+class Dictionary:
+    def __init__(self,size):
+        self.increment=0
+        self.increment_getting=0
+        self.size=size
+        self.slots=[None]*self.size
+        self.data=[None]*self.size
+    def put(self,key,value):
+        hash_value=self.hash_function(key)
+        if self.slots[hash_value]==None:
+            self.slots[hash_value]=key
+            self.data[hash_value]=value
+        else:
+            if self.slots[hash_value]==key:
+                self.data[hash_value]=value
+            else:
+                new_hash_value=self.rehash(hash_value)
+                while(self.slots[new_hash_value]!=None and self.slots[new_hash_value]!=key):
+                    new_hash_value=self.rehash(new_hash_value)
+                if self.slots[new_hash_value]==None:
+                    self.slots[new_hash_value]=key
+                    self.data[new_hash_value]=value
+                else:
+                    self.data[new_hash_value]=value
+
+    def hash_function(self,key):
+        return abs(hash(key))%self.size
+#   code for rehashing in quadratic Probing
+    def rehash(self, old_hash_value):
+        self.increment+=1
+        return (old_hash_value+(self.increment**2))%self.size
+    def rehash_getting(self,old_hash_value):
+        self.increment_getting+=1
+        return(old_hash_value+(self.increment_getting**2))%self.size
+    def __setitem__(self,key,value):
+        self.put(key,value)
+
+    def get(self,key):
+        start_pos=self.hash_function(key)
+        curr_pos=start_pos
+    #   Array must be filled by elements 
+    #   if the array will be empty it will 
+    #   give the wrong output.
+        while self.slots[curr_pos]!=None:
+            if self.slots[curr_pos]==key:
+                return self.data[curr_pos]
+            curr_pos=self.rehash_getting(curr_pos)
+            if curr_pos==start_pos:
+                return "Not Found"
+        return "None wala Not Found"
+    def __str__(self):
+        for i in range(len(self.slots)):
+            if self.slots[i]!=None:
+                print(self.slots[i],":",self.data[i],end=' ')
+        print()
+        return ""
+
+d=Dictionary(4)
+d.put(1,10)
+d.put(2,20)
+d.put(3,22)
+d.put(11,24)
+print(d.slots)
+print(d.data)
+print(d.get(11))
+d.__str__()
+print(d.get("Javac"))
+d1=Dictionary(10)
+print("Check for Quadratic Probing")
+d1.put(1,10)
+d1.put(2,20)
+d1.put(3,22)
+d1.put(11,24)
+print(d1.slots)
+print(d1.data)
